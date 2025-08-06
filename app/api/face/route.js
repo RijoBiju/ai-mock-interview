@@ -2,7 +2,6 @@ import { NextResponse } from "next/server";
 
 export async function POST(req) {
   try {
-    // Ensure the request is multipart/form-data
     const contentType = req.headers.get("content-type") || "";
     if (!contentType.includes("multipart/form-data")) {
       return NextResponse.json(
@@ -11,9 +10,8 @@ export async function POST(req) {
       );
     }
 
-    // Get FormData from request
     const formData = await req.formData();
-    const videoFile = formData.get("video"); // The file input name must be "video"
+    const videoFile = formData.get("video");
 
     if (!videoFile) {
       return NextResponse.json(
@@ -22,12 +20,10 @@ export async function POST(req) {
       );
     }
 
-    console.log("✅ Received video file:", videoFile.name);
+    console.log("Received video file:", videoFile.name);
 
-    // Convert Blob to Buffer
     const buffer = Buffer.from(await videoFile.arrayBuffer());
 
-    // Send video file to Flask API
     const flaskFormData = new FormData();
     flaskFormData.append(
       "file",
@@ -37,13 +33,10 @@ export async function POST(req) {
 
     console.log("📡 Sending video to Flask API...");
 
-    const response = await fetch(
-      "https://15d2-34-85-158-207.ngrok-free.app/predict",
-      {
-        method: "POST",
-        body: flaskFormData,
-      }
-    );
+    const response = await fetch(process.env.VIDEO_NGROK_LINK, {
+      method: "POST",
+      body: flaskFormData,
+    });
 
     if (!response.ok) {
       const errorText = await response.text();

@@ -37,13 +37,10 @@ export async function POST(req) {
 
     console.log("📡 Sending audio to Flask API...");
 
-    const response = await fetch(
-      "https://175c-104-199-173-178.ngrok-free.app/predict",
-      {
-        method: "POST",
-        body: flaskFormData,
-      }
-    );
+    const response = await fetch(process.env.AUDIO_NGROK_LINK, {
+      method: "POST",
+      body: flaskFormData,
+    });
 
     if (!response.ok) {
       const errorText = await response.text();

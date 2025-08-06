@@ -3,7 +3,7 @@ import { Lightbulb, Volume2 } from "lucide-react";
 import React from "react";
 const QuestionsSection = ({ mockInterviewQuestion, activeQuestionIndex }) => {
   console.log(
-    "🚀 ~ file: QuestionsSection.jsx:4 ~ QuestionsSection ~ mockInterviewQuestion:",
+    "file: QuestionsSection.jsx:4 ~ QuestionsSection ~ mockInterviewQuestion:",
     mockInterviewQuestion
   );
   const textToSpeach = (text) => {
