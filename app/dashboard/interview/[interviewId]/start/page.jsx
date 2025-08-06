@@ -26,7 +26,7 @@ const StartInterview = ({ params }) => {
         .select()
         .from(MockInterview)
         .where(eq(MockInterview.mockId, params.interviewId));
-      
+
       const jsonMockResp = JSON.parse(result[0].jsonMockResp);
       setMockInterviewQuestion(jsonMockResp);
       setInterviewData(result[0]);
@@ -42,7 +42,7 @@ const StartInterview = ({ params }) => {
     // Optional: Add any additional logic when an answer is saved
     // For example, you might want to automatically move to the next question
     if (activeQuestionIndex < mockInterviewQuestion.length - 1) {
-      setActiveQuestionIndex(prev => prev + 1);
+      setActiveQuestionIndex((prev) => prev + 1);
     }
   };
 
@@ -83,17 +83,23 @@ const StartInterview = ({ params }) => {
       </div>
       <div className="flex justify-end gap-6">
         {activeQuestionIndex > 0 && (
-          <Button onClick={() => setActiveQuestionIndex(activeQuestionIndex - 1)}>
+          <Button
+            onClick={() => setActiveQuestionIndex(activeQuestionIndex - 1)}
+          >
             Previous Question
           </Button>
         )}
         {activeQuestionIndex != mockInterviewQuestion?.length - 1 && (
-          <Button onClick={() => setActiveQuestionIndex(activeQuestionIndex + 1)}>
+          <Button
+            onClick={() => setActiveQuestionIndex(activeQuestionIndex + 1)}
+          >
             Next Question
           </Button>
         )}
         {activeQuestionIndex == mockInterviewQuestion?.length - 1 && (
-          <Link href={'/dashboard/interview/' + interViewData?.mockId + '/feedback'}>
+          <Link
+            href={"/dashboard/interview/" + interViewData?.mockId + "/feedback"}
+          >
             <Button>End Interview</Button>
           </Link>
         )}

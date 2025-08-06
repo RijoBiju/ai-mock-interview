@@ -1,22 +1,23 @@
 "use client";
-import { db } from '@/utils/db';
-import { UserAnswer } from '@/utils/schema';
-import { eq } from 'drizzle-orm';
-import React, { useEffect, useState } from 'react';
+import { db } from "@/utils/db";
+import { UserAnswer } from "@/utils/schema";
+import { eq } from "drizzle-orm";
+import React, { useEffect, useState } from "react";
+import ReactMarkdown from "react-markdown";
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
-import { 
-  CheckCircle2, 
-  XCircle, 
-  ChevronsUpDown, 
-  Activity, 
-  Target 
-} from 'lucide-react';
+import {
+  CheckCircle2,
+  XCircle,
+  ChevronsUpDown,
+  Activity,
+  Target,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useRouter } from 'next/navigation';
+import { useRouter } from "next/navigation";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 
 const Feedback = ({ params }) => {
@@ -31,7 +32,8 @@ const Feedback = ({ params }) => {
 
   const GetFeedback = async () => {
     setLoading(true);
-    const result = await db.select()
+    const result = await db
+      .select()
       .from(UserAnswer)
       .where(eq(UserAnswer.mockIdRef, params.interviewId))
       .orderBy(UserAnswer.id);
@@ -45,9 +47,10 @@ const Feedback = ({ params }) => {
       .filter((rating) => !isNaN(rating));
 
     const totalRating = validRatings.reduce((sum, rating) => sum + rating, 0);
-    const avgRating = validRatings.length > 0 
-      ? (totalRating / validRatings.length).toFixed(1) 
-      : "N/A";
+    const avgRating =
+      validRatings.length > 0
+        ? (totalRating / validRatings.length).toFixed(1)
+        : "N/A";
 
     setAverageRating(avgRating);
   };
@@ -64,7 +67,9 @@ const Feedback = ({ params }) => {
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <Activity className="mx-auto h-12 w-12 text-indigo-600 animate-pulse" />
-          <p className="mt-4 text-gray-600">Loading your interview feedback...</p>
+          <p className="mt-4 text-gray-600">
+            Loading your interview feedback...
+          </p>
         </div>
       </div>
     );
@@ -82,12 +87,12 @@ const Feedback = ({ params }) => {
           </CardHeader>
           <CardContent className="text-center">
             <p className="text-gray-600 mb-6">
-              It seems like no feedback has been generated for this interview. 
+              It seems like no feedback has been generated for this interview.
               This could be due to an incomplete interview or a system issue.
             </p>
-            <Button 
-              variant="outline" 
-              onClick={() => router.replace('/dashboard')}
+            <Button
+              variant="outline"
+              onClick={() => router.replace("/dashboard")}
               className="w-full"
             >
               Return to Dashboard
@@ -101,16 +106,24 @@ const Feedback = ({ params }) => {
               <CardHeader className="flex flex-row items-center gap-4">
                 <CheckCircle2 className="h-12 w-12 text-green-600" />
                 <div>
-                  <h2 className="text-3xl font-bold text-green-600">Great Job!</h2>
-                  <p className="text-gray-600">You've completed your mock interview.</p>
+                  <h2 className="text-3xl font-bold text-green-600">
+                    Great Job!
+                  </h2>
+                  <p className="text-gray-600">
+                    You've completed your mock interview.
+                  </p>
                 </div>
               </CardHeader>
               <CardContent>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <p className="text-sm text-gray-500">Overall Rating</p>
-                    <p className={`text-2xl font-bold ${getRatingColor(averageRating)}`}>
-                      {averageRating ? `${averageRating}/10` : 'N/A'}
+                    <p
+                      className={`text-2xl font-bold ${getRatingColor(
+                        averageRating
+                      )}`}
+                    >
+                      {averageRating ? `${averageRating}/10` : "N/A"}
                     </p>
                   </div>
                   <div>
@@ -129,22 +142,26 @@ const Feedback = ({ params }) => {
               Detailed Interview Feedback
             </h3>
             <p className="text-sm text-gray-500 mb-4">
-              Review each question's performance and get insights for improvement.
+              Review each question's performance and get insights for
+              improvement.
             </p>
 
             {feedbackList.map((item, index) => (
-              <Collapsible key={index} className="border rounded-lg overflow-hidden">
+              <Collapsible
+                key={index}
+                className="border rounded-lg overflow-hidden"
+              >
                 <CollapsibleTrigger className="w-full">
                   <div className="flex items-center justify-between p-4 bg-gray-100 hover:bg-gray-200 transition-colors">
                     <div className="flex items-center gap-3">
-                      <Target 
+                      <Target
                         className={`h-5 w-5 ${
-                          parseFloat(item.rating) >= 7 
-                            ? "text-green-500" 
-                            : parseFloat(item.rating) >= 4 
-                            ? "text-yellow-500" 
+                          parseFloat(item.rating) >= 7
+                            ? "text-green-500"
+                            : parseFloat(item.rating) >= 4
+                            ? "text-yellow-500"
                             : "text-red-500"
-                        }`} 
+                        }`}
                       />
                       <span className="font-medium text-gray-800 line-clamp-1">
                         {item.question}
@@ -154,28 +171,39 @@ const Feedback = ({ params }) => {
                   </div>
                 </CollapsibleTrigger>
                 <CollapsibleContent className="p-4 bg-white">
-                  <div className="grid md:grid-cols-2 gap-4">
-                    <div>
-                      <h4 className="font-semibold text-gray-700 mb-2">Your Answer</h4>
-                      <p className="bg-red-50 p-3 rounded-lg text-sm text-red-900 border border-red-200">
-                        {item.userAns || "No answer provided"}
+                  <div className="grid md:grid-cols-2 gap-6">
+                    {/* Your Answer Section */}
+                    <div className="border rounded-lg p-4 bg-red-50">
+                      <h4 className="font-semibold text-red-700 mb-2">
+                        Your Answer
+                      </h4>
+                      <p className="text-sm text-gray-800">
+                        {item.userAns ? item.userAns : "No answer provided"}
                       </p>
                     </div>
-                    <div>
-                      <h4 className="font-semibold text-gray-700 mb-2">Correct Answer</h4>
-                      <p className="bg-green-50 p-3 rounded-lg text-sm text-green-900 border border-green-200">
-                        {item.correctAns}
-                      </p>
+
+                    {/* Correct Answer Section */}
+                    <div className="border rounded-lg p-4 bg-green-50">
+                      <h4 className="font-semibold text-green-700 mb-2">
+                        Correct Answer
+                      </h4>
+                      <ReactMarkdown>{item.correctAns}</ReactMarkdown>
                     </div>
                   </div>
-                  <div className="mt-4">
-                    <h4 className="font-semibold text-gray-700 mb-2">Feedback</h4>
-                    <p className="bg-blue-50 p-3 rounded-lg text-sm text-primary border border-blue-200">
-                      {item.feedback}
-                    </p>
+
+                  {/* Feedback Section */}
+                  <div className="mt-4 border rounded-lg p-4 bg-blue-50">
+                    <h4 className="font-semibold text-blue-700 mb-2">
+                      Feedback
+                    </h4>
+                    <ReactMarkdown>{item.feedback}</ReactMarkdown>
                   </div>
+
+                  {/* Rating Display */}
                   <div className="mt-4 text-right">
-                    <span className={`font-bold ${getRatingColor(item.rating)}`}>
+                    <span
+                      className={`font-bold ${getRatingColor(item.rating)}`}
+                    >
                       Rating: {item.rating}/10
                     </span>
                   </div>
@@ -184,8 +212,8 @@ const Feedback = ({ params }) => {
             ))}
 
             <div className="text-center mt-8">
-              <Button 
-                onClick={() => router.replace('/dashboard')}
+              <Button
+                onClick={() => router.replace("/dashboard")}
                 className="w-full md:w-auto"
               >
                 Return to Dashboard

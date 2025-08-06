@@ -37,7 +37,8 @@ function Interview({ params }) {
 
   const handleWebcamToggle = () => {
     if (!webCamEnabled) {
-      navigator.mediaDevices.getUserMedia({ video: true })
+      navigator.mediaDevices
+        .getUserMedia({ video: true })
         .then(() => {
           setWebCamEnabled(true);
           toast.success("Webcam and microphone enabled");
@@ -80,9 +81,10 @@ function Interview({ params }) {
               <span>Information</span>
             </h2>
             <h2 className="mt-3 text-yellow-500">
-              Enable Video Web Cam and Microphone to Start your AI Generated Mock Interview. 
-              It has 5 questions which you can answer and will provide a report based on your answers. 
-              NOTE: We never record your video. Web cam access can be disabled at any time.
+              Enable Video Web Cam and Microphone to Start your AI Generated
+              Mock Interview. It has questions which you can answer and will
+              provide a report based on your answers. Web cam access can be
+              disabled at any time.
             </h2>
           </div>
         </div>
